@@ -47,10 +47,11 @@ public class ClienteController {
 		logger.info("Fin ClienteController ::: insert");
 		return new ResponseEntity<Cliente>(cliente, HttpStatus.CREATED);
 	}
-	
-	@PutMapping
-	public ResponseEntity<Cliente> update(@Valid @RequestBody Cliente obj){
+
+	@PutMapping("/{id}")
+	public ResponseEntity<Cliente> update(@PathVariable("id") Integer id, @Valid @RequestBody Cliente obj){
 		logger.info("Inicio ClienteController ::: update ::: " + obj);
+		obj.setClienteId(id);
 		Cliente cliente = service.update(obj);
 		logger.info("Fin ClienteController ::: update");
 		return new ResponseEntity<Cliente>(cliente, HttpStatus.CREATED);

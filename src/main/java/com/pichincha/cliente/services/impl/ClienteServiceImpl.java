@@ -22,12 +22,20 @@ public class ClienteServiceImpl implements IClienteService {
 	
 	@Override
 	public Cliente insert(Cliente obj) {
+		List<Cliente> clientes = repo.findAll();
+		Long total = clientes.stream().filter(c->c.getDni().equals(obj.getDni())).count();
+		if (total>0)
+			throw new ModelNotFoundException("El dni ya se encuentra registrado.");
+
 		return repo.save(obj);
 	}
 
 	@Override
 	public Cliente update(Cliente obj) {
-		validarExisteCliente(obj.getClienteId());
+		if (obj.getClienteId() == null)
+			throw new BadRequestException("El campo clienteId es requerido.");
+
+		validarYObtenerCliente(obj.getClienteId());
 		return repo.save(obj);
 	}
 
@@ -38,26 +46,21 @@ public class ClienteServiceImpl implements IClienteService {
 
 	@Override
 	public Cliente fintById(Integer id) {
-		Optional<Cliente> op = repo.findById(id);
-		if (op.isPresent()) {
-			return op.get();
-		}else {
-			throw new ModelNotFoundException("Cliente no encontrado.");
-		}
+		return validarYObtenerCliente(id);
 	}
 
 	@Override
 	public void delete(Integer id) {
-		Optional<Cliente> op = repo.findById(id);
-		if (op.isPresent())
-			throw new ModelNotFoundException("Cliente no encontrado.");
-
-		repo.deleteById(id);
+		Cliente cliente = validarYObtenerCliente(id);
+		cliente.setEstado("false");
+		update(cliente);
 	}
 
-	private void validarExisteCliente(Integer id) {
+	private Cliente validarYObtenerCliente(Integer id) {
 		Optional<Cliente> op = repo.findById(id);
-		if (!op.isPresent())
-			throw new BadRequestException("El campo clienteId es requerido.");
+		if (op.isPresent())
+			return op.get();
+
+		throw new BadRequestException("Cliente no encontrado.");
 	}
 }

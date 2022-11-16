@@ -28,17 +28,16 @@ class ClienteServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        cliente = Cliente.builder()
-                .clienteId(1)
-                .nombre("William Mamani")
-                .genero("M")
-                .edad(30)
-                .dni("12345678")
-                .direccion("direccion")
-                .telefono("123456789")
-                .contrasenia("123")
-                .estado("true")
-                .build();
+        cliente = new Cliente();
+        cliente.setClienteId(1);
+        cliente.setNombre("William Mamani");
+        cliente.setGenero("M");
+        cliente.setEdad(30);
+        cliente.setDni("12345678");
+        cliente.setDireccion("direccion");
+        cliente.setTelefono("123456789");
+        cliente.setContrasenia("123");
+        cliente.setEstado("true");
     }
 
     @Test
