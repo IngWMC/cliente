@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 
 //import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
